@@ -52,6 +52,16 @@ Als nächsten Schritt haben wir so gut wie möglich die Daten für die nächsten
 
 * Gibt es einen Unterschied in Bezug auf die Überlebenswahrscheinlichkeit von Männern und Frauen und wie ist dieser zu überprüfen?
 
+
+#Geschlecht - Überlebenschance
+mafe_surv <- passengers %>% group_by(Sex) %>% summarise(survived = sum(Survived), .groups = 'drop')
+sum_surv <- passengers %>% summarise(Survived = sum(Survived))
+mafe_surv <- as.data.frame(mafe_surv)
+ggplot(data = mafe_surv, mapping = aes( x = Sex, y = survived )) +
+  geom_bar(stat = "identity", fill = "lightblue") +
+  labs(title = paste("Anzahl Überlebende:", sum_surv), x = "Geschlecht", y = "Überlebensrate") +
+  theme_minimal()
+
 * Wie ist der Zusammenhang von Alter und Geschlecht in Bezug auf die Überlebenswahrscheinlichkeit?
 
 * Hat das Deck als Teil der Kabineninformation einen Einfluss auf die Überlebenswahrscheinlichkeit?

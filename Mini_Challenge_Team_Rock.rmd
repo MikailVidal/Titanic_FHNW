@@ -32,14 +32,21 @@ Als nächsten Schritt haben wir so gut wie möglich die Daten für die nächsten
 ## Datenwissenschaftlich:
 * Welche Datentypen gibt es bei Data Science Projekten allgemein zu unterscheiden?
 - Kategorisch: Diese Daten bestehen aus Gruppen oder Kategorien ohne bestimmte Reihenfolge, wie   etwa Geschlecht oder Farben.
-- Ordinal: Hier gibt es eine natürliche Reihenfolge, z.B. Schulabschlüsse (Hauptschule, Realschule, Studium).
+- Ordinal: Hier gibt es eine natürliche Reihenfolge, z.B. Schulabschlüsse (Realschule, Sekundarschule, Gymnasium, Studium).
 - Kontinuierlich: Werte, die auf einer Skala liegen und unendlich viele Zwischenwerte annehmen können, wie z.B. Temperatur oder Körpergrösse.
 
 * Welche Visualisierungsformen gibt es, um die Verteilung einer kontinuierlichen bzw. einer kategorialen Variablen darzustellen?
+- Für kontinuierliche Variablen eignen sich Histogramme oder Boxplots. Diese zeigen, wie sich Werte über einen Bereich verteilen.
+- Kategoriale Variablen werden oft mit Balkendiagrammen oder Kreisdiagrammen dargestellt, da diese die Häufigkeit der Kategorien zeigen.
 
 * Wie kann der Einfluss einer kategorialen Variablen auf die Verteilung einer kontinuierlichen bzw. einer kategorialen Variablen visualisiert werden?
 
 * Was versteht man unter Ausreissern in den Daten und was ist deren Effekt bezüglich statistischer Masszahlen?
+Ausreisser sind ungewöhnliche Datenpunkte, die sich stark vom Rest der Daten unterscheiden. Sie können aus Messfehlern, seltenen Ereignissen oder extremen Werten resultieren. Ihr Effekt auf statistische Masszahlen ist beträchtlich:
+
+- Der Mittelwert kann stark durch Ausreisser beeinflusst werden und ein verzerrtes Bild der zentralen Tendenz liefern.
+- Der Median bleibt hingegen relativ stabil, da er sich nur an der Mitte der Verteilung orientiert.
+- Auch die Standardabweichung wird durch Ausreisser erhöht, da sie die Streuung aller Datenpunkte berücksichtigt.
 
 * OPTIONAL: Welche Schwierigkeiten können Vorhersagemodelle mit Ausreissern einzelner Prädiktoren haben und welchen Einfluss haben sie auf Klassifikationsbäume? Als Prädiktoren bezeichnet man die Variablen, die für die Vorhersage benutzt werden.
 

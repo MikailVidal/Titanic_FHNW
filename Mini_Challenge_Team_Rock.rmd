@@ -71,6 +71,12 @@ ggplot(data = mafe_surv, mapping = aes( x = Sex, y = survived )) +
 
 * Wie ist der Zusammenhang von Alter und Geschlecht in Bezug auf die Überlebenswahrscheinlichkeit?
 
+#Alter, Geschlecht, Überlebenschancen
+print(passengers %>% group_by(Age, Sex)) %>% summarise(Survived = sum(Survived))
+age_sex_surv <- (passengers %>% group_by(Age, Sex)) %>% summarise(Survived = sum(Survived))
+ggplot(data = age_sex_surv, mapping = aes(x = Sex, y = Survived, fill = as.factor(Age))) +
+  geom_bar(stat = "identity", position = "dodge")
+
 * Hat das Deck als Teil der Kabineninformation einen Einfluss auf die Überlebenswahrscheinlichkeit?
 
 * Wie viele Paare ohne Kinder waren an Bord der Titanic?

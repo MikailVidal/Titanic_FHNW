@@ -31,6 +31,9 @@ Als nächsten Schritt haben wir so gut wie möglich die Daten für die nächsten
 
 ## Datenwissenschaftlich:
 * Welche Datentypen gibt es bei Data Science Projekten allgemein zu unterscheiden?
+- Kategorisch: Diese Daten bestehen aus Gruppen oder Kategorien ohne bestimmte Reihenfolge, wie   etwa Geschlecht oder Farben.
+- Ordinal: Hier gibt es eine natürliche Reihenfolge, z.B. Schulabschlüsse (Hauptschule, Realschule, Studium).
+- Kontinuierlich: Werte, die auf einer Skala liegen und unendlich viele Zwischenwerte annehmen können, wie z.B. Temperatur oder Körpergrösse.
 
 * Welche Visualisierungsformen gibt es, um die Verteilung einer kontinuierlichen bzw. einer kategorialen Variablen darzustellen?
 

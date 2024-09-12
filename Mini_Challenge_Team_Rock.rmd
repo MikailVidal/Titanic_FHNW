@@ -1,13 +1,13 @@
 ---
 title: "Mini Challenge Team Rock!"
-author: "Team Rock"
-date: < the current date DD/MM/YYYY >
+author: "Autoren: Elias Pulver, Micha Steinmann, Harmanjot Singh, Mikail Vidal"
+date: "12. September 2024"
 output: html_document
 ---
 
 # Unser Vorgehen
 Als Erstes haben wir alle benötigten libraries importiert:
-```{r}
+```{r results='hide', message=FALSE}
 library(tidyverse)
 library(tidymodels)
 library(ggmosaic)

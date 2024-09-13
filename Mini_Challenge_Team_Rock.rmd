@@ -103,6 +103,51 @@ ggplot(data = age_sex_surv, mapping = aes(x = Sex, y = Survived, fill = as.facto
   geom_bar(stat = "identity", position = "dodge")
 ```
 
+* Hat das Deck als Teil der Kabineninformation einen Einfluss auf die Überlebenswahrscheinlichkeit?
+```{r results='hide', message=FALSE}
+
+letters_to_filter <- c("A", "B", "C", "D", "E", "F", "G")
+
+sectors <- c()
+death_probabilities <- c()
+
+# Schleife über jeden Buchstaben im Vektor
+for (letter in letters_to_filter) {
+  # Filtern der Daten nach dem aktuellen Buchstaben
+  filtered_cabines <- subset(passengers, grepl(letter, Cabin))
+  num_entries <- nrow(filtered_cabines)
+  # Ausgabe des Ergebnisses für den aktuellen Buchstaben
+ 
+  dead <- subset(filtered_cabines, grepl(0, Survived))
+  dead_number <- nrow(dead)
+
+  
+  probability <-0
+  probability <- dead_number * 100 / num_entries
+  
+  
+  
+  print(paste("Dead probability in sector ", letter))
+  print(probability)
+  
+  sectors <- c(sectors, letter)
+  death_probabilities <- c(death_probabilities, probability)
+}
+```
+```{r}
+
+barplot(death_probabilities,
+        names.arg = sectors,
+        main = "Sterbewahrscheinlichkeit nach Sektoren",
+        xlab = "Sektoren",
+        ylab = "Sterbewahrscheinlichkeit (%)",
+        col = "lightblue")
+
+```
+
+
+
+
 * Was verbindet die Passagiere mit den folgenden Ticket-Nummern (a) 19928, (b) 19950, (c) PC 17755, (d) 110152?
 ```{r}
 passengers$Ticket <- as.character(passengers$Ticket)

@@ -27,13 +27,13 @@ passengers$Age[passengers$Age > 0 & passengers$Age < 1] <- 1
 passengers <- passengers %>% filter(!(Age < 0 | FamilyMembers > 20))
 
 
-# Verteilung der Todesopfer und überlebenden nach Alter
+# Distribution of casualties and Survivees by age
 ggplot(passengers, aes(x = Age, fill = factor(Survived))) +
   geom_histogram(binwidth = 5, position = "dodge") +
   labs(x = "Alter", y = "Anzahl") +
   scale_fill_manual(values = c("#A70709", "green"), labels = c("Nicht Überlebt", "Überlebt"))
 
-# Warscheindlichkeit für Tod bei 25 Jährigen
+# Probability of Survival at the age of 25
 filtered_data <- subset(passengers, Age == 25)
 ggplot(filtered_data, aes(x = Age, fill = factor(Survived))) +
   geom_histogram(binwidth = 1, position = "dodge") +
@@ -41,13 +41,9 @@ ggplot(filtered_data, aes(x = Age, fill = factor(Survived))) +
   scale_fill_manual(values = c("#A70709", "green"), labels = c("Nicht Überlebt", "Überlebt"))
 
 
-
-# Analyse ob Daten der Passagier Tickets ähndlichkeiten haben -> alle sitzen in der gleichen Klasse 
+# Compare specific passenger tickets to find similarities
 passengers$Ticket <- as.character(passengers$Ticket)
-
 ticket_list <- c("19928", "19950", "PC 17755", "110152", "19929")
-
 ticket_numbers <- subset(passengers, Ticket %in% ticket_list)
-print(ticket_numbers)
 
 

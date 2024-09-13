@@ -21,72 +21,92 @@ Anschliessend haben wir die Daten der Challenge als DataFrame in einer Variable 
 ```{r}
 passengers <- read.csv("Mini-Challenge_Titanic.csv", sep = ";")
 ```
-Als nächsten Schritt haben wir so gut wie möglich die Daten für die nächsten Schritte bereinigt und aufbereitet:
+Als Nächstes haben wir so gut wie möglich die Daten für die nächsten Schritte bereinigt und aufbereitet:
+
+* Weiteres Feld "FamilyMembers"
+
+* Altersklasse hinzugefügt
+
+* Sonstige Überprüfungen
 
 ```{r}
+# Mutate and sort data
+
+# Sum Siblings, Parents, Children and Spouses for a total of family members
+passengers <- passengers %>% mutate(FamilyMembers = passengers$SibSp + passengers$Parch)
+# Add an age class for children, teenagers, young adults, adults and seniors depending on the age
+passengers <- passengers %>% mutate(AgeCategory = case_when(passengers$Age <= 12 ~ "Child",
+                                                            passengers$Age <= 19 ~ "Teenager",
+                                                            passengers$Age <= 29 ~ "Young Adult",
+                                                            passengers$Age <= 49 ~ "Adult",
+                                                            is.numeric(passengers$Age) ~ "Senior",
+                                                            TRUE ~ "Unknown",))
+# Assign the passengers an age of 1 if the value is lower than 1 but older than 0
+passengers$Age[passengers$Age > 0 & passengers$Age < 1] <- 1
+
+# Delete entries where the age is under 0 or the amount of family members surpasses 20
+passengers <- passengers %>% filter(!(Age < 0 | FamilyMembers > 20))
 
 ```
+Die zu beantwortenden Fragen wurden anhand der oben aufbereiteten Daten einzeln erarbeitet und gelöst und die Ergebnisse als Kollektiv folgend aufgelistet.
+
 
 # Zu beantwortende Fragen
 
-## Datenwissenschaftlich:
+### Datenwissenschaftlich:
 * Welche Datentypen gibt es bei Data Science Projekten allgemein zu unterscheiden?
-- Kategorisch: Diese Daten bestehen aus Gruppen oder Kategorien ohne bestimmte Reihenfolge, wie   etwa Geschlecht oder Farben.
-- Ordinal: Hier gibt es eine natürliche Reihenfolge, z.B. Schulabschlüsse (Realschule, Sekundarschule, Gymnasium, Studium).
-- Kontinuierlich: Werte, die auf einer Skala liegen und unendlich viele Zwischenwerte annehmen können, wie z.B. Temperatur oder Körpergrösse.
+
+Kategorisch: Diese Daten bestehen aus Gruppen oder Kategorien ohne bestimmte Reihenfolge, wie   etwa Geschlecht oder Farben.
+Ordinal: Hier gibt es eine natürliche Reihenfolge, z.B. Schulabschlüsse (Realschule, Sekundarschule, Gymnasium, Studium).
+Kontinuierlich: Werte, die auf einer Skala liegen und unendlich viele Zwischenwerte annehmen können, wie z.B. Temperatur oder Körpergrösse.
 
 * Welche Visualisierungsformen gibt es, um die Verteilung einer kontinuierlichen bzw. einer kategorialen Variablen darzustellen?
-- Für kontinuierliche Variablen eignen sich Histogramme oder Boxplots. Diese zeigen, wie sich Werte über einen Bereich verteilen.
-- Kategoriale Variablen werden oft mit Balkendiagrammen oder Kreisdiagrammen dargestellt, da diese die Häufigkeit der Kategorien zeigen.
 
-* Wie kann der Einfluss einer kategorialen Variablen auf die Verteilung einer kontinuierlichen bzw. einer kategorialen Variablen visualisiert werden?
+Für kontinuierliche Variablen eignen sich Histogramme oder Boxplots. Diese zeigen, wie sich Werte über einen Bereich verteilen.
+Kategoriale Variablen werden oft mit Balkendiagrammen oder Kreisdiagrammen dargestellt, da diese die Häufigkeit der Kategorien zeigen.
 
 * Was versteht man unter Ausreissern in den Daten und was ist deren Effekt bezüglich statistischer Masszahlen?
+
 Ausreisser sind ungewöhnliche Datenpunkte, die sich stark vom Rest der Daten unterscheiden. Sie können aus Messfehlern, seltenen Ereignissen oder extremen Werten resultieren. Ihr Effekt auf statistische Masszahlen ist beträchtlich:
 
-- Der Mittelwert kann stark durch Ausreisser beeinflusst werden und ein verzerrtes Bild der zentralen Tendenz liefern.
-- Der Median bleibt hingegen relativ stabil, da er sich nur an der Mitte der Verteilung orientiert.
-- Auch die Standardabweichung wird durch Ausreisser erhöht, da sie die Streuung aller Datenpunkte berücksichtigt.
+Der Mittelwert kann stark durch Ausreisser beeinflusst werden und ein verzerrtes Bild der zentralen Tendenz liefern.
+Der Median bleibt hingegen relativ stabil, da er sich nur an der Mitte der Verteilung orientiert.
+Auch die Standardabweichung wird durch Ausreisser erhöht, da sie die Streuung aller Datenpunkte berücksichtigt.
 
-* OPTIONAL: Welche Schwierigkeiten können Vorhersagemodelle mit Ausreissern einzelner Prädiktoren haben und welchen Einfluss haben sie auf Klassifikationsbäume? Als Prädiktoren bezeichnet man die Variablen, die für die Vorhersage benutzt werden.
+* OPTIONAL: Welche Schwierigkeiten können Vorhersagemodelle mit Ausreissern einzelner Prädiktoren haben und welchen Einfluss haben sie auf Klassifikationsbäume?
 
-* OPTIONAL: Was ist der Sinn einer Unterteilung der Daten in Trainings- und Testdaten bei Vorhersagemodellen?
+Als Prädiktoren bezeichnet man die Variablen, die für die Vorhersage benutzt werden.
 
-* OPTIONAL: Wie verhalten sich Gütemasse / Metriken von Vorhersagemodellen, wenn sie auf Trainings- bzw. Testdaten berechnet werden?
 
-## Inhaltlich:
-* Gibt es einen Alterseffekt in Bezug auf die Überlebenswahrscheinlichkeit und wie lässt sich dieser visualisieren?
-
+### Inhaltlich:
 * Gibt es einen Unterschied in Bezug auf die Überlebenswahrscheinlichkeit von Männern und Frauen und wie ist dieser zu überprüfen?
 
-
-#Geschlecht - Überlebenschance
+```{r results='hide', message=FALSE}
 mafe_surv <- passengers %>% group_by(Sex) %>% summarise(survived = sum(Survived), .groups = 'drop')
 sum_surv <- passengers %>% summarise(Survived = sum(Survived))
 mafe_surv <- as.data.frame(mafe_surv)
+```
+```{r}
 ggplot(data = mafe_surv, mapping = aes( x = Sex, y = survived )) +
   geom_bar(stat = "identity", fill = "lightblue") +
   labs(title = paste("Anzahl Überlebende:", sum_surv), x = "Geschlecht", y = "Überlebensrate") +
   theme_minimal()
+```
 
 * Wie ist der Zusammenhang von Alter und Geschlecht in Bezug auf die Überlebenswahrscheinlichkeit?
 
-#Alter, Geschlecht, Überlebenschancen
-print(passengers %>% group_by(Age, Sex)) %>% summarise(Survived = sum(Survived))
-age_sex_surv <- (passengers %>% group_by(Age, Sex)) %>% summarise(Survived = sum(Survived))
-ggplot(data = age_sex_surv, mapping = aes(x = Sex, y = Survived, fill = as.factor(Age))) +
+```{r results='hide', message=FALSE}
+age_sex_surv <- (passengers %>% group_by(AgeCategory, Sex)) %>% summarise(Survived = sum(Survived))
+```
+```{r}
+ggplot(data = age_sex_surv, mapping = aes(x = Sex, y = Survived, fill = as.factor(AgeCategory))) +
   geom_bar(stat = "identity", position = "dodge")
-
-* Hat das Deck als Teil der Kabineninformation einen Einfluss auf die Überlebenswahrscheinlichkeit?
-
-* Wie viele Paare ohne Kinder waren an Bord der Titanic?
-
-* Welchen Einfluss hat die Grösse der Reisegruppe oder Familie auf die Überlebenswahrscheinlichkeit?
-
-* Welche Möglichkeit gibt es um den Effekt von Passagierklasse auf die Überlebenswahrscheinlichkeit gleichzeitig in absoluten und relativen Zahlen zu visualisieren?
+```
 
 * Was verbindet die Passagiere mit den folgenden Ticket-Nummern (a) 19928, (b) 19950, (c) PC 17755, (d) 110152?
-
-* Wie stehen die Chancen für eine 25-jährige Frau den Untergang der Titanic überlebt zu haben?
-
-* Wurden Regeln beim Besteigen der Rettungsboote beachtet?
+```{r}
+passengers$Ticket <- as.character(passengers$Ticket)
+ticket_list <- c("19928", "19950", "PC 17755", "110152", "19929")
+ticket_numbers <- subset(passengers, Ticket %in% ticket_list)
+print(ticket_numbers)
+```
